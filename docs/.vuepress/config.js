@@ -1,8 +1,6 @@
 const plugins = require('./config/plugins');
-const themeConfig = require('./config/themeConfig');
-
+const themeConfig = require('./config/theme');
 module.exports = {
-  
   title: '个人博客',
   description: 'vuepress、前端、博客、个人博客',
   head: [

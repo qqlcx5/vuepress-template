@@ -4,7 +4,7 @@ heroImage: 'https://cdn.jsdelivr.net/gh/qqlcx5/figure-bed@1.1/img/logo.jpg'
 heroText: 前端元
 tagline: A magical vuepress-template
 actionText: 点击开始 →
-actionLink: /vue/
+actionLink: /test/
 
 features:
   - title: 丰富功能
