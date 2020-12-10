@@ -33,10 +33,10 @@ function readFileList(dir = docsRoot, filesList = []) {
               filePath
             });
           }
-
         }
-      }        
+      }
   });
+  console.log(filesList);
   return filesList;
 }
 
