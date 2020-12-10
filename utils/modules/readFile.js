@@ -7,7 +7,7 @@ const docsRoot = path.join(__dirname, '..', '..', 'docs'); // docs文件路径
 const chalk = require('chalk') // 命令行打印美化
 const log = console.log
 
-function readFileList(dir = docsRoot, filesList = [], fpath = '') {
+function readFile(dir = docsRoot, filesList = [], fpath = '') {
   const files = fs.readdirSync(dir);
   files.forEach( (item, index) => {
       let filePath = path.join(dir, item);
@@ -27,25 +27,25 @@ function readFileList(dir = docsRoot, filesList = [], fpath = '') {
             sidebarDepth: 0,
             children: []
         })
-        readFileList(path.join(dir, item), filesList[index].children, item); //递归读取文件
+        readFile(path.join(dir, item), filesList[index].children, item); //递归读取文件
       } else {
           const fileNameArr = path.basename(filePath).split('.')
           let name = null, type = null, itemName = null
           if (fileNameArr.length === 2) { // 没有序号的文件
             name = fileNameArr[0]
             type = fileNameArr[1],
-            itemName = fileNameArr[0]
+            itemName = fpath ? `${fpath}/${fileNameArr[0]}` : fileNameArr[0]
           } else if (fileNameArr.length === 3) { // 有序号的文件
             name = fileNameArr[1]
             type = fileNameArr[2]
-            itemName = `${fileNameArr[0]}.${fileNameArr[1]}`
+            itemName = fpath ? `${fpath}/${fileNameArr[0]}.${fileNameArr[1]}` : `${fileNameArr[0]}.${fileNameArr[1]}`
           } else { // 超过两个‘.’的
             log(chalk.yellow(`warning: 该文件 "${filePath}" 没有按照约定命名，将忽略生成相应数据。`))
             return
           }
           if(type === 'md'){ // 过滤非md文件
             filesList.push([
-                `${fpath}/${itemName}` , name
+                itemName , name
             ]);
           }
       }
@@ -53,4 +53,4 @@ function readFileList(dir = docsRoot, filesList = [], fpath = '') {
   return filesList;
 }
 
-module.exports = readFileList;
+module.exports = readFile;
