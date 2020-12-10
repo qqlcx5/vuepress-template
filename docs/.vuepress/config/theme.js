@@ -1,13 +1,16 @@
 const path = require('path'); // 路径模块
-const utilsRoot = path.join(__dirname, '..', '..','..', 'utils/modules'); // docs文件路径
+const utilsRoot = path.join(__dirname, '..', '..','..', 'utils/modules');
 const docsRoot = path.join(__dirname,'..', '..');
-const readFile = require(utilsRoot + '/readFile'); // 路径模块
-const simpleReadFile = require(utilsRoot + '/simpleReadFile'); // 路径模块
+const readFile = require(utilsRoot + '/readFile');
 
 const 总标题 = readFile(docsRoot + '/总标题');
-const 配置 = simpleReadFile('配置标题', docsRoot + '/配置');
-console.log('配置配置配置配置配置');
-console.log(JSON.stringify(配置));
+const 配置 = [{
+    title: '配置标题',
+    collapsable: false,
+    sidebarDepth: 0,
+    children: readFile(docsRoot + '/配置')
+}]
+
 
 const themeConfig = {
   editLinks: true,
