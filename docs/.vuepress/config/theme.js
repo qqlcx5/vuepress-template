@@ -5,10 +5,10 @@ const readFileList = require(utilsRoot); // 路径模块
 const chalk = require('chalk') // 命令行打印美化
 const log = console.log
 
-const filePath = path.join(__dirname, '..', '..', '总标题/01.标题'); // 要批量修改的文件路径
-const files = readFileList(filePath); // 读取所有md文件数据
-log(chalk.red('--------'))
-log(chalk.green(JSON.stringify(files)))
+// const filePath = path.join(__dirname, '..', '..', '总标题/01.标题'); // 要批量修改的文件路径
+// const files = readFileList(filePath); // 读取所有md文件数据
+// log(chalk.red('--------'))
+// log(chalk.green(JSON.stringify(files)))
 
 const themeConfig = {
   editLinks: true,
