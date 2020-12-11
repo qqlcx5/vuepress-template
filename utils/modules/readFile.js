@@ -15,7 +15,9 @@ function readFile(dir = docsRoot, filesList = [], fpath = '') {
       if (stat.isDirectory() && item !== '.vuepress') {
         const fileNameArr = path.basename(filePath).split('.')
         let name = null;
-        if (fileNameArr.length === 2) { 
+        if (fileNameArr.length === 1) { 
+            name = fileNameArr[0]
+        } else if(fileNameArr.length === 2){
             name = fileNameArr[1]
         } else {
           log(chalk.yellow(`warning: 该文件夹 "${filePath}" 没有按照约定命名，将忽略生成相应数据。`))
@@ -24,7 +26,6 @@ function readFile(dir = docsRoot, filesList = [], fpath = '') {
         filesList.push({
             title: name,
             collapsable: false,
-            sidebarDepth: 0,
             children: []
         })
         readFile(path.join(dir, item), filesList[index].children, item); //递归读取文件
