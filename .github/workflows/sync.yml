@@ -1,4 +1,4 @@
-name: Sync
+name: Sync to Gitee
 
 on:
   push:
