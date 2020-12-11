@@ -4,7 +4,7 @@ heroImage: 'https://cdn.jsdelivr.net/gh/qqlcx5/figure-bed@1.1/img/logo.jpg'
 heroText: 前端元
 tagline: A magical vuepress-template
 actionText: 点击开始 →
-actionLink: /多目录/01.章节1/01.章节1-1/
+actionLink: /指南/01.介绍
 
 features:
   - title: 丰富功能
