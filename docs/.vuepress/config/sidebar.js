@@ -1,4 +1,5 @@
 // 此文件用于测试和侧边栏数据格式的参考。
+
 const themeConfig = {
   sidebar: {
     '/多目录/': [
