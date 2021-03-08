@@ -1,18 +1,18 @@
 {
   "name": "vuepress-template",
   "version": "1.0.0",
-  "description": "vuepress、前端、博客、文档、个人博客",
+  "description": "vuepess,前端博客,个人技术博客,前端,前端开发,前端框架,web前端,前端面试题,技术文档,学习,面试,JavaScript,js,ES6,TypeScript,vue,python,css3,html5,Node,git,github,markdown",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "docs:dev": "vuepress dev docs --port 3000",
     "docs:build": "vuepress build docs"
   },
-  "author": "lcx",
+  "author": "前端有道",
   "license": "ISC",
   "devDependencies": {
-    "dayjs": "^1.9.3",
-    "vuepress": "^1.7.1"
+    "dayjs": "^1.10.4",
+    "vuepress": "^1.8.2"
   },
   "dependencies": {}
 }
