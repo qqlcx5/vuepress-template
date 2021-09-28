@@ -2,7 +2,6 @@
   <div class="tags">
     <span
       v-for="(item, index) in tags"
-      v-show="!item.pages || (item.pages && item.pages.length > 0)"
       :key="index"
       :class="{'active': item.name == currentTag}"
       :style="{ 'backgroundColor': getOneColor() }"
@@ -11,7 +10,7 @@
 </template>
 
 <script>
-import { defineComponent, computed, getCurrentInstance } from 'vue-demi'
+import { defineComponent, computed } from '@vue/composition-api'
 import { getOneColor } from '@theme/helpers/other'
 
 export default defineComponent({
@@ -22,11 +21,10 @@ export default defineComponent({
     }
   },
   setup (props, ctx) {
-    const instance = getCurrentInstance().proxy
+    const { root: _this } = ctx
     const tags = computed(() => {
-      return [{ name: instance.$recoLocales.all, path: '/tag/' }, ...instance.$tagesList]
+      return [{ name: _this.$recoLocales.tag.all, path: '/tag/' }, ..._this.$tags.list]
     })
-
     const tagClick = tag => {
       ctx.emit('getCurrentTag', tag)
     }

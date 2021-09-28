@@ -77,7 +77,6 @@ export default {
     display: flex;
     flex-wrap wrap
     li
-      flex: 1;
       text-align: center;
       font-size 12px
       color var(--text-color)

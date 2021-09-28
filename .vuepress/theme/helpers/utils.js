@@ -199,16 +199,12 @@ export function formatDate (time, fmt = 'yyyy-MM-dd hh:mm:ss') {
 
 // 获取时间的数字类型
 export function getTimeNum (date) {
-  const dateNum = !date ? 0 : new Date(date).getTime()
-  return dateNum
+  return new Date(date.frontmatter.date).getTime()
 }
 
 // 比对时间
 export function compareDate (a, b) {
-  const aDateNum = getTimeNum(a.frontmatter.date)
-  const bDateNum = getTimeNum(b.frontmatter.date)
-  if (aDateNum === 0 || bDateNum === 0) return 0
-  return bDateNum - aDateNum
+  return getTimeNum(b) - getTimeNum(a)
 }
 
 // 向 head 中添加 style

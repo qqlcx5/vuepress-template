@@ -4,7 +4,7 @@
     <ModuleTransition>
       <TagList
         v-show="recoShowModule"
-        :currentTag="$recoLocales.all"
+        :currentTag="currentTag"
         @getCurrentTag="tagClick"></TagList>
     </ModuleTransition>
 
@@ -14,42 +14,79 @@
         v-show="recoShowModule"
         class="list"
         :data="$recoPosts"
-        @paginationChange="paginationChange"
-      ></note-abstract>
+        :currentPage="currentPage"
+        :currentTag="currentTag"
+        @currentTag="getCurrentTag"></note-abstract>
+    </ModuleTransition>
+
+    <!-- 分页 -->
+    <ModuleTransition delay="0.16">
+      <pagation
+        class="pagation"
+        :total="$recoPosts.length"
+        :currentPage="currentPage"
+        @getCurrentPage="getCurrentPage"></pagation>
     </ModuleTransition>
   </Common>
 </template>
 
 <script>
-import { defineComponent, getCurrentInstance } from 'vue-demi'
 import Common from '@theme/components/Common'
 import TagList from '@theme/components/TagList'
 import NoteAbstract from '@theme/components/NoteAbstract'
+import pagination from '@theme/mixins/pagination'
 import { ModuleTransition } from '@vuepress-reco/core/lib/components'
 import moduleTransitonMixin from '@theme/mixins/moduleTransiton'
 
-export default defineComponent({
-  mixins: [moduleTransitonMixin],
+export default {
+  mixins: [pagination, moduleTransitonMixin],
   components: { Common, NoteAbstract, TagList, ModuleTransition },
-
-  setup (props, ctx) {
-    const instance = getCurrentInstance().proxy
-
-    const tagClick = (tagInfo) => {
-      if (instance.$route.path !== tagInfo.path) {
-        instance.$router.push({ path: tagInfo.path })
-      }
+  data () {
+    return {
+      tags: [],
+      currentTag: '',
+      currentPage: 1,
+      allTagName: ''
     }
+  },
 
-    const paginationChange = (page) => {
+  created () {
+    this.currentTag = this.$recoLocales.tag.all
+    this.allTagName = this.$recoLocales.tag.all
+    if (this.$tags.list.length > 0) {
+      this.currentTag = this.$route.query.tag ? this.$route.query.tag : this.currentTag
+    }
+  },
+
+  mounted () {
+    this._setPage(this._getStoragePage())
+  },
+
+  methods: {
+
+    tagClick (tagInfo) {
+      if (this.$route.path !== tagInfo.path) {
+        this.$router.push({ path: tagInfo.path })
+      }
+    },
+
+    getCurrentTag (tag) {
+      this.$emit('currentTag', tag)
+    },
+
+    getCurrentPage (page) {
+      this._setPage(page)
       setTimeout(() => {
         window.scrollTo(0, 0)
       }, 100)
+    },
+    _setPage (page) {
+      this.currentPage = page
+      this.$page.currentPage = page
+      this._setStoragePage(page)
     }
-
-    return { tagClick, paginationChange }
   }
-})
+}
 </script>
 
 <style src="../styles/theme.styl" lang="stylus"></style>

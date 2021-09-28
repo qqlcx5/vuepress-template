@@ -3,7 +3,13 @@ import { filterPosts, sortPostsByStickyAndDate, sortPostsByDate } from '../helpe
 export default {
   computed: {
     $recoPosts () {
-      let posts = this.$site.pages
+      const {
+        $categories: { list: articles }
+      } = this
+
+      let posts = articles.reduce((allData, currentData) => {
+        return [...allData, ...currentData.pages]
+      }, [])
 
       posts = filterPosts(posts, false)
       sortPostsByStickyAndDate(posts)
@@ -35,22 +41,6 @@ export default {
       }
 
       return formatPagesArr
-    },
-    $categoriesList () {
-      return this.$categories.list.map(category => {
-        category.pages = category.pages.filter(page => {
-          return page.frontmatter.publish !== false
-        })
-        return category
-      })
-    },
-    $tagesList () {
-      return this.$tags.list.map(tag => {
-        tag.pages = tag.pages.filter(page => {
-          return page.frontmatter.publish !== false
-        })
-        return tag
-      })
     },
     $showSubSideBar () {
       const {

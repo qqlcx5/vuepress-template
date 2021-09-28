@@ -34,18 +34,3 @@ export function interceptRouterError (router) {
     return originalPush.call(this, location).catch(err => err)
   }
 }
-
-export function fixRouterError404 (router) {
-  router.beforeEach((to, from, next) => {
-    // 解决非ASCII文件名的路由, 防止 404
-    const decodedPath = decodeURIComponent(to.path)
-    if (decodedPath !== to.path) {
-      next(Object.assign({}, to, {
-        fullPath: decodeURIComponent(to.fullPath),
-        path: decodedPath
-      }))
-    } else {
-      next()
-    }
-  })
-}

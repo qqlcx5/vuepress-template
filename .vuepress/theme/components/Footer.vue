@@ -11,7 +11,7 @@
     <span>
       <reco-icon icon="reco-copyright" />
       <a>
-        <span v-if="$themeConfig.author">{{ $themeConfig.author }}</span>
+        <span v-if="$themeConfig.author || $site.title">{{ $themeConfig.author || $site.title }}</span>
         &nbsp;&nbsp;
         <span v-if="$themeConfig.startYear && $themeConfig.startYear != (new Date().getFullYear())">{{ $themeConfig.startYear }} - </span>
         {{ new Date().getFullYear() }}
@@ -30,18 +30,17 @@
 </template>
 
 <script>
-import { defineComponent, computed, getCurrentInstance } from 'vue-demi'
+import { defineComponent, computed } from '@vue/composition-api'
 import { RecoIcon } from '@vuepress-reco/core/lib/components'
 import { version } from '../package.json'
 export default defineComponent({
   components: { RecoIcon },
   setup (props, ctx) {
-    const instance = getCurrentInstance().proxy
     const showAccessNumber = computed(() => {
       const {
         $themeConfig: { valineConfig },
         $themeLocaleConfig: { valineConfig: valineLocalConfig }
-      } = instance
+      } = ctx.root
 
       const vc = valineLocalConfig || valineConfig
 

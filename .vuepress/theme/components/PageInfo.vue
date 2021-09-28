@@ -1,16 +1,16 @@
 <template>
   <div>
     <reco-icon
-      v-if="pageInfo.frontmatter.author || $themeConfig.author"
+      v-if="pageInfo.frontmatter.author || $themeConfig.author || $site.title"
       icon="reco-account"
     >
-      <span>{{ pageInfo.frontmatter.author || $themeConfig.author }}</span>
+      <span>{{ pageInfo.frontmatter.author || $themeConfig.author || $site.title }}</span>
     </reco-icon>
     <reco-icon
       v-if="pageInfo.frontmatter.date"
       icon="reco-date"
     >
-      <span>{{ formatDateValue(pageInfo.frontmatter.date) }}</span>
+      <span>{{ pageInfo.frontmatter.date | formatDateValue }}</span>
     </reco-icon>
     <reco-icon
       v-if="showAccessNumber === true"
@@ -35,10 +35,9 @@
 </template>
 
 <script>
-import { defineComponent, getCurrentInstance } from 'vue-demi'
 import { RecoIcon } from '@vuepress-reco/core/lib/components'
 
-export default defineComponent({
+export default {
   components: { RecoIcon },
   props: {
     pageInfo: {
@@ -56,29 +55,30 @@ export default defineComponent({
       default: false
     }
   },
-
-  setup (props, ctx) {
-    const instance = getCurrentInstance().proxy
-
-    const numStyle = {
-      fontSize: '.9rem',
-      fontWeight: 'normal',
-      color: '#999'
-    }
-
-    const goTags = (tag) => {
-      if (instance.$route.path !== `/tag/${tag}/`) {
-        instance.$router.push({ path: `/tag/${tag}/` })
+  data () {
+    return {
+      numStyle: {
+        fontSize: '.9rem',
+        fontWeight: 'normal',
+        color: '#999'
       }
     }
-
-    const formatDateValue = (value) => {
-      return new Intl.DateTimeFormat(instance.$lang).format(new Date(value))
+  },
+  filters: {
+    formatDateValue (value) {
+      let localDate = new Date(value).toLocaleString()
+      if (value.split(' ').length === 1) localDate = localDate.split(' ')[0]
+      return localDate
     }
-
-    return { numStyle, goTags, formatDateValue }
+  },
+  methods: {
+    goTags (tag) {
+      if (this.$route.path !== `/tag/${tag}/`) {
+        this.$router.push({ path: `/tag/${tag}/` })
+      }
+    }
   }
-})
+}
 </script>
 
 <style lang="stylus" scoped>

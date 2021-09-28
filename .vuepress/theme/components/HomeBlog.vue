@@ -30,11 +30,19 @@
       <div v-show="recoShowModule" class="home-blog-wrapper">
         <div class="blog-list">
           <!-- 博客列表 -->
-          <note-abstract :data="$recoPosts" @paginationChange="paginationChange" />
+          <note-abstract
+            :data="$recoPosts"
+            :currentPage="currentPage"></note-abstract>
+          <!-- 分页 -->
+          <pagation
+            class="pagation"
+            :total="$recoPosts.length"
+            :currentPage="currentPage"
+            @getCurrentPage="getCurrentPage" />
         </div>
         <div class="info-wrapper">
           <PersonalInfo/>
-          <h4><reco-icon icon="reco-category" /> {{$recoLocales.category}}</h4>
+          <h4><reco-icon icon="reco-category" /> {{homeBlogCfg.category}}</h4>
           <ul class="category-wrapper">
             <li class="category-item" v-for="(item, index) in this.$categories.list" :key="index">
               <router-link :to="item.path">
@@ -44,9 +52,9 @@
             </li>
           </ul>
           <hr>
-          <h4 v-if="$tags.list.length !== 0"><reco-icon icon="reco-tag" /> {{$recoLocales.tag}}</h4>
+          <h4 v-if="$tags.list.length !== 0"><reco-icon icon="reco-tag" /> {{homeBlogCfg.tag}}</h4>
           <TagList @getCurrentTag="getPagesByTags" />
-          <h4 v-if="$themeConfig.friendLink && $themeConfig.friendLink.length !== 0"><reco-icon icon="reco-friend" /> {{$recoLocales.friendLink}}</h4>
+          <h4 v-if="$themeConfig.friendLink && $themeConfig.friendLink.length !== 0"><reco-icon icon="reco-friend" /> {{homeBlogCfg.friendLink}}</h4>
           <FriendLink />
         </div>
       </div>
@@ -59,62 +67,98 @@
 </template>
 
 <script>
-import { defineComponent, toRefs, reactive, computed, getCurrentInstance, onMounted } from 'vue-demi'
 import TagList from '@theme/components/TagList'
 import FriendLink from '@theme/components/FriendLink'
 import NoteAbstract from '@theme/components/NoteAbstract'
+import pagination from '@theme/mixins/pagination'
 import { ModuleTransition, RecoIcon } from '@vuepress-reco/core/lib/components'
 import PersonalInfo from '@theme/components/PersonalInfo'
 import { getOneColor } from '@theme/helpers/other'
 
-export default defineComponent({
+export default {
+  mixins: [pagination],
   components: { NoteAbstract, TagList, FriendLink, ModuleTransition, PersonalInfo, RecoIcon },
-  setup (props, ctx) {
-    const instance = getCurrentInstance().proxy
-
-    const state = reactive({
+  data () {
+    return {
       recoShow: false,
-      heroHeight: 0
-    })
+      currentPage: 1,
+      tags: []
+    }
+  },
+  computed: {
+    recoShowModule () {
+      return this.$parent.recoShowModule
+    },
+    homeBlogCfg () {
+      return this.$recoLocales.homeBlog
+    },
+    actionLink () {
+      const {
+        actionLink: link,
+        actionText: text
+      } = this.$frontmatter
 
-    const recoShowModule = computed(() => instance && instance.$parent.recoShowModule)
-
-    const heroImageStyle = computed(() => instance.$frontmatter.heroImageStyle || {})
-
-    const bgImageStyle = computed(() => {
-      const url = instance.$frontmatter.bgImage
-        ? instance.$withBase(instance.$frontmatter.bgImage)
-        : require('../../images/bg.svg')
-
+      return {
+        link,
+        text
+      }
+    },
+    heroImageStyle () {
+      return this.$frontmatter.heroImageStyle || {}
+    },
+    bgImageStyle () {
       const initBgImageStyle = {
         textAlign: 'center',
         overflow: 'hidden',
-        background: `url(${url}) center/cover no-repeat`
+        background: `
+          url(${this.$frontmatter.bgImage
+    ? this.$withBase(this.$frontmatter.bgImage)
+    : require('../images/bg.svg')}) center/cover no-repeat
+        `
       }
-
-      const { bgImageStyle } = instance.$frontmatter
+      const {
+        bgImageStyle
+      } = this.$frontmatter
 
       return bgImageStyle ? { ...initBgImageStyle, ...bgImageStyle } : initBgImageStyle
-    })
-
-    onMounted(() => {
-      state.heroHeight = document.querySelector('.hero').clientHeight
-      state.recoShow = true
-    })
-
-    return { recoShowModule, heroImageStyle, bgImageStyle, ...toRefs(state), getOneColor }
+    },
+    heroHeight () {
+      return document.querySelector('.hero').clientHeight
+    }
+  },
+  mounted () {
+    this.recoShow = true
+    this._setPage(this._getStoragePage())
   },
   methods: {
-    paginationChange (page) {
+    // 获取当前页码
+    getCurrentPage (page) {
+      this._setPage(page)
       setTimeout(() => {
         window.scrollTo(0, this.heroHeight)
       }, 100)
     },
+    // 根据分类获取页面数据
+    getPages () {
+      let pages = this.$site.pages
+      pages = pages.filter(item => {
+        const { home, date } = item.frontmatter
+        return !(home == true || date === undefined)
+      })
+      // reverse()是为了按时间最近排序排序
+      this.pages = pages.length == 0 ? [] : pages
+    },
     getPagesByTags (tagInfo) {
       this.$router.push({ path: tagInfo.path })
-    }
+    },
+    _setPage (page) {
+      this.currentPage = page
+      this.$page.currentPage = page
+      this._setStoragePage(page)
+    },
+    getOneColor
   }
-})
+}
 </script>
 
 <style lang="stylus">
