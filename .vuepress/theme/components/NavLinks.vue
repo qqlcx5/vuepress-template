@@ -101,7 +101,7 @@ export default {
           }),
           text: category.text || '分类',
           type: 'links',
-          icon: 'reco-category'
+          icon: 'reco-document'
         })
       }
       if (!isHasTag && Object.hasOwnProperty.call(blogConfig, 'tag')) {

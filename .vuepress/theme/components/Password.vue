@@ -25,7 +25,7 @@
       <div v-show="recoShowModule" class="footer">
         <span>
           <reco-icon icon="reco-theme" />
-          <a target="blank" href="https://vuepress-theme-reco.recoluan.com">vuePress-theme-reco</a>
+          <a target="blank" href="https://github.com/qqlcx5/frontend">前端有道</a>
         </span>
         <span>
           <reco-icon icon="reco-copyright" />

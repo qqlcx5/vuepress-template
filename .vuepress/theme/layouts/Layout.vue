@@ -8,6 +8,7 @@
 
 <script>
 import Home from '@theme/components/Home'
+import HomePage from '@theme/components/HomePageOne'
 import HomeBlog from '@theme/components/HomeBlog'
 import Page from '@theme/components/Page'
 import Footer from '@theme/components/Footer'
@@ -17,7 +18,7 @@ import moduleTransitonMixin from '@theme/mixins/moduleTransiton'
 
 export default {
   mixins: [moduleTransitonMixin],
-  components: { HomeBlog, Home, Page, Common, Footer },
+  components: { HomeBlog, Home, HomePage, Page, Common, Footer },
   computed: {
     sidebarItems () {
       return resolveSidebarItems(
